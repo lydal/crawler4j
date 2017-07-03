@@ -18,6 +18,7 @@
 package edu.uci.ics.crawler4j.examples.imagecrawler;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.UUID;
 import java.util.regex.Pattern;
@@ -52,7 +53,6 @@ public class ImageCrawler extends WebCrawler {
 
     public static void configure(String[] domain, String storageFolderName) {
         crawlDomains = domain;
-
         storageFolder = new File(storageFolderName);
         if (!storageFolder.exists()) {
             storageFolder.mkdirs();
@@ -75,7 +75,7 @@ public class ImageCrawler extends WebCrawler {
                 return true;
             }
         }
-        return false;
+        return true;
     }
 
     @Override
@@ -85,7 +85,7 @@ public class ImageCrawler extends WebCrawler {
         // We are only interested in processing images which are bigger than 10k
         if (!imgPatterns.matcher(url).matches() ||
             !((page.getParseData() instanceof BinaryParseData) ||
-              (page.getContentData().length < (10 * 1024)))) {
+              (page.getContentData().length < (100 * 1024)))) {
             return;
         }
 

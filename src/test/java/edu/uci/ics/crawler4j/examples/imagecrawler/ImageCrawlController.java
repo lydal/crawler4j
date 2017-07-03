@@ -38,6 +38,8 @@ public class ImageCrawlController {
             logger.info("\t rootFolder (it will contain intermediate crawl data)");
             logger.info("\t numberOfCralwers (number of concurrent threads)");
             logger.info("\t storageFolder (a folder for storing downloaded images)");
+            logger.info("\t seed");
+            logger.info("\t resume");
             return;
         }
 
@@ -54,11 +56,12 @@ public class ImageCrawlController {
      * true to make sure they are included in the crawl.
      */
         config.setIncludeBinaryContentInCrawling(true);
-
-        String[] crawlDomains = {"http://uci.edu/"};
+        String[] crawlDomains = args[3].split(";");
+        config.setResumableCrawling(Boolean.parseBoolean(args[4]));
 
         PageFetcher pageFetcher = new PageFetcher(config);
         RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
+        robotstxtConfig.setEnabled(false);
         RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
         CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);
         for (String domain : crawlDomains) {
